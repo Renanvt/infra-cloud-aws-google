@@ -1,0 +1,54 @@
+version: "3.7"
+# Definição dos Serviços
+services:
+  # Nome do Serviço na Stack
+  # https://docs.dify.ai/development/backend/sandbox
+  dify_sandbox:
+    # Imagem do Serviço
+    # https://hub.docker.com/r/langgenius/dify-sandbox
+    image: langgenius/dify-sandbox:0.2.12
+    # Define o Hostname do Container
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    # Configura a rede do Serviço
+    networks:
+      - network_swarm_public
+    # Adiciona capacidades administrativas do sistema ao contêiner
+    cap_add:
+      - SYS_ADMIN
+    # Configura as variáveis de ambiente do Serviço
+    environment:
+      ################################################################
+      # Configurações Gerais do Sandbox ##############################
+      ################################################################
+      # Chave API para autenticação e acesso aos serviços do Dify
+      API_KEY: dify-sandbox
+      # Define o modo de operação do Gin (framework web em Go); 'release' otimiza para produção
+      GIN_MODE: release
+      # Define o tempo limite em segundos para os workers antes de uma requisição ser cancelada
+      WORKER_TIMEOUT: 30
+    # Define o modo de deploy do Container
+    deploy:
+      # Configura o modo de deploy do Serviço
+      mode: replicated
+      # Configura o numero de réplicas do Serviço (1 é o padrão)
+      replicas: 1
+      # Define a estratégia de deploy do Serviço
+      placement:
+        # Define onde o serviço irá rodar
+        constraints:
+          - node.labels.app == dify # Rodar serviço no Manager
+          # - node.hostname == srv-worker # Rodar serviço no Host
+          # - node.labels.app == workers # Rodar serviço no Host no Label: app, valor do label: workers
+      resources:
+        # Configura os limites de recursos do Serviço
+        limits:
+          # Configura o limite de CPU do Serviço
+          cpus: "1"
+          # Configura o limite de memória do Serviço
+          memory: 2048M
+
+# Define as Redes
+networks:
+  network_swarm_public:
+    external: true
+    name: network_swarm_public

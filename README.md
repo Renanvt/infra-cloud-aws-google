@@ -10,7 +10,7 @@
  <img width=200px height=200px src="https://i.imgur.com/FxL5qM0.jpg" alt="Bot logo"></a>
 </p>
 
-<h2 align="center">INFRAESTRUTURA ALOB EXPRESS (MULTI-CLOUD)</h2>
+<h2 align="center">INFRAESTRUTURA PROJECT (MULTI-CLOUD)</h2>
 <h3 align="center">AWS & Google Cloud | Docker Swarm | N8N | Traefik | Portainer</h3>
 
 <div align="center">

@@ -60,14 +60,14 @@ services:
       # Define a Porta http para o N8N (padrão: 5678)
       - N8N_PORT=5678
       # Configura o Host do Editor do N8N
-      - N8N_HOST=meueditor.n8n.synca.com.br
+      - N8N_HOST=meueditor.meu-dominio.com.br
       # Configura o Endereço competo do Editor (tem que deixar / no final)
-      - N8N_EDITOR_BASE_URL=https://meueditor.n8n.synca.com.br/
+      - N8N_EDITOR_BASE_URL=https://meueditor.meu-dominio.com.br/
       # Força o uso de SSL nas URL internas do N8N
       - N8N_PROTOCOL=https
       # Configura o Endereço do Webhook
       # Pode ser subdomínio ou outro domínio
-      - WEBHOOK_URL=https://hookncst.agenciasynca.com.br/
+      - WEBHOOK_URL=https://hookncst.meu-dominio.com.br/
       ################################################################
       ################################################################
       ################################################################
@@ -132,7 +132,7 @@ services:
         # Configura o Roteamento do Traefik
         - traefik.enable=true
         # Define o enderço do Webhook do N8N
-        - traefik.http.routers.n8n_webhook.rule=Host(`hookncst.agenciasynca.com.br`)
+        - traefik.http.routers.n8n_webhook.rule=Host(`hookncst.meu-dominio.com.br`)
         # Redireciona o endereço para HTTPS
         - traefik.http.routers.n8n_webhook.entrypoints=websecure
         # Define o certificado SSL

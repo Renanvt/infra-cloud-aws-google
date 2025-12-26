@@ -77,7 +77,7 @@ services:
       # Configurações dos Eventos via RabbitMQ #######################
       ################################################################
       ################################################################
-      - RABBITMQ_ENABLED=false
+      - RABBITMQ_ENABLED=true
       - RABBITMQ_URI=amqp://usuario:senha@rabbitmq:5672/default
       - RABBITMQ_EXCHANGE_NAME=evolution_v2
       - RABBITMQ_GLOBAL_ENABLED=false

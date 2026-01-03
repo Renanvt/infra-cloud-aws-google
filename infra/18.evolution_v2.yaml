@@ -1,0 +1,207 @@
+version: "3.7"
+
+##########
+# Evolution API
+# Mais configurações no Github:
+# https://github.com/EvolutionAPI/evolution-api/blob/v2.0.0/Docker/.env.example
+#
+# Imagem do Docker
+# https://hub.docker.com/r/atendai/evolution-api
+##########
+
+services:
+  # Define o Serviço do Stack
+  evolution_v2:
+    # Define a imagem do container
+    # Vamos usar a v2
+    image: atendai/evolution-api:v2.2.3
+    # Define o hostname do container
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    # Define os volumes do stack
+    volumes:
+      - evolution_instances:/evolution/instances
+    # Define as redes do seu swarm
+    networks:
+      - network_swarm_public
+    # Define as Variáveis de ambiente
+    environment:
+      ################################################################
+      ################################################################
+      # Configurações Gerais da API ##################################
+      ################################################################
+      ################################################################
+      # Configura o Endereço da Evolution
+      - SERVER_URL=https://evolution.meu-dominio.com.br
+      # Habilita a remoção automática da instâncias
+      - DEL_INSTANCE=false
+      # Habilita o Provider Local de Cache (desabilitado por padrão)
+      - PROVIDER_ENABLED=false
+      - PROVIDER_HOST=127.0.0.1
+      - PROVIDER_PORT=5656
+      - PROVIDER_PREFIX=evolution_v2
+      # Configura o Cliente do WhatsApp
+      - CONFIG_SESSION_PHONE_CLIENT=Windows
+      - CONFIG_SESSION_PHONE_NAME=Chrome
+      # Configura a Versão do WhatsApp
+      - CONFIG_SESSION_PHONE_VERSION=2.3000.1030831524
+      # Informa a quantidade de QRCODE que será gerado
+      - QRCODE_LIMIT=30
+      # Informa o idioma da Evolution
+      - LANGUAGE=pt-BR
+      ################################################################
+      ################################################################
+      # Configurações de Autenticação da API #########################
+      ################################################################
+      ################################################################
+      - AUTHENTICATION_API_KEY=SUA_GLOBAL_API_KEY_AQUI
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+      ################################################################
+      ################################################################
+      # Configurações do Banco de Dados ##############################
+      ################################################################
+      ################################################################
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:SENHA@postgres:5432/evolution
+      # Identificador da Evolution quando usa 1 banco de dados
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_v2
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_DATA_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      - DATABASE_SAVE_DATA_LABELS=true
+      - DATABASE_SAVE_DATA_HISTORIC=true
+      ################################################################
+      ################################################################
+      # Configurações dos Eventos via RabbitMQ #######################
+      ################################################################
+      ################################################################
+      - RABBITMQ_ENABLED=true
+      - RABBITMQ_URI=amqp://usuario:senha@rabbitmq:5672/default
+      - RABBITMQ_EXCHANGE_NAME=evolution_v2
+      - RABBITMQ_GLOBAL_ENABLED=false
+      ################################################################
+      ################################################################
+      # Configurações dos Eventos via AWS SQS ########################
+      ################################################################
+      ################################################################
+      - SQS_ENABLED=false
+      - SQS_ACCESS_KEY_ID=
+      - SQS_SECRET_ACCESS_KEY=
+      - SQS_ACCOUNT_ID=
+      - SQS_REGION=
+      ################################################################
+      ################################################################
+      # Configurações de Web Socket ##################################
+      ################################################################
+      ################################################################
+      - WEBSOCKET_ENABLED=false
+      - WEBSOCKET_GLOBAL_EVENTS=false
+      ################################################################
+      ################################################################
+      # Configurações do WhatsApp Business Cloud #####################
+      ################################################################
+      ################################################################
+      - WA_BUSINESS_TOKEN_WEBHOOK=evolution
+      - WA_BUSINESS_URL=https://graph.facebook.com
+      - WA_BUSINESS_VERSION=v20.0
+      - WA_BUSINESS_LANGUAGE=pt_BR
+      ################################################################
+      ################################################################
+      # Configurações dos Eventos via Webhook ########################
+      # Método não Recomendado. Usar fila com RabbitMQ #######
+      ################################################################
+      ################################################################
+      - WEBHOOK_GLOBAL_URL=''
+      - WEBHOOK_GLOBAL_ENABLED=false
+      - WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS=false
+      ################################################################
+      ################################################################
+      # Configurações do Typebot #####################################
+      ################################################################
+      ################################################################
+      - TYPEBOT_ENABLED=true
+      - TYPEBOT_API_VERSION=latest
+      - TYPEBOT_KEEP_OPEN=false
+      - TYPEBOT_SEND_MEDIA_BASE64=true
+      ################################################################
+      ################################################################
+      # Configurações do Chatwoot ####################################
+      ################################################################
+      ################################################################
+      - CHATWOOT_ENABLED=true
+      - CHATWOOT_MESSAGE_READ=true
+      # Opcional
+      - CHATWOOT_IMPORT_DATABASE_CONNECTION_URI=postgresql://postgres:SENHA@postgres:5432/chatwoot?sslmode=disable
+      - CHATWOOT_IMPORT_PLACEHOLDER_MEDIA_MESSAGE=true
+      ################################################################
+      ################################################################
+      # Configurações do Open AI #####################################
+      ################################################################
+      ################################################################
+      - OPENAI_ENABLED=true
+      - OPENAI_API_KEY_GLOBAL=
+      ################################################################
+      ################################################################
+      # Configurações do Dify AI #####################################
+      ################################################################
+      ################################################################
+      - DIFY_ENABLED=true
+      ################################################################
+      ################################################################
+      # Configurações do Cache da API ################################
+      ################################################################
+      ################################################################
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/1
+      - CACHE_REDIS_PREFIX_KEY=evolution_v2
+      - CACHE_REDIS_SAVE_INSTANCES=true
+      - CACHE_LOCAL_ENABLED=false
+      ################################################################
+      ################################################################
+      # Configurações do Armazenamento de Mídia / Arquivos ###
+      ################################################################
+      ################################################################
+      - S3_ENABLED=false
+      - S3_ACCESS_KEY=
+      - S3_SECRET_KEY=
+      - S3_BUCKET=nome-do-bucket
+      - S3_PORT=443
+      - S3_REGION=us-east-1
+      - S3_ENDPOINT=s3.us-east-1.amazonaws.com
+      - S3_USE_SSL=true
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4096M
+        reservations:
+          cpus: ".4"
+          memory: 1024M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.evolution_v2.rule=Host(`evolution.meu-dominio.com.br`)"
+        - traefik.http.routers.evolution_v2.entrypoints=websecure
+        - traefik.http.routers.evolution_v2.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.evolution_v2.priority=1
+        - traefik.http.routers.evolution_v2.service=evolution_v2
+        - traefik.http.services.evolution_v2.loadbalancer.server.port=8080
+        - traefik.http.services.evolution_v2.loadbalancer.passHostHeader=true
+
+# Definição Global dos Volumes
+volumes:
+  evolution_instances:
+    external: true
+    name: evolution_v2_data
+
+# Definição Global das Redes
+networks:
+  network_swarm_public:
+    external: true
+    name: network_swarm_public

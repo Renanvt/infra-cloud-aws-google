@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  dify_plugin_daemon:
+    image: langgenius/dify-plugin-daemon:0.5.2-local
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    networks:
+      - network_swarm_public
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: dify
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_USERNAME: ''
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: 0
+      SERVER_KEY: ${DIFY_PLUGIN_DAEMON_KEY}
+      DIFY_INNER_API_URL: http://dify_api_dify_api:5001
+      DIFY_INNER_API_KEY: ${DIFY_PLUGIN_DAEMON_KEY}
+      PLUGIN_DIFY_INNER_API_URL: http://dify_api_dify_api:5001
+      PLUGIN_DIFY_INNER_API_KEY: ${DIFY_PLUGIN_DAEMON_KEY}
+      PLUGIN_REMOTE_INSTALLING_HOST: ${DIFY_WEB_DOMAIN}
+      PLUGIN_REMOTE_INSTALLING_PORT: '443'
+      PLUGIN_WORKING_PATH: /app/storage/cwd
+      MARKETPLACE_ENABLED: 'true'
+      MARKETPLACE_API_URL: https://marketplace.dify.ai
+      FORCE_VERIFYING_SIGNATURE: 'true'
+      ENFORCE_LANGGENIUS_PLUGIN_SIGNATURES: 'true'
+    volumes:
+      - dify_plugin_cwd:/app/storage/cwd
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+
+volumes:
+  dify_plugin_cwd:
+    external: true
+    name: dify_plugin_cwd
+
+networks:
+  network_swarm_public:
+    external: true
+    name: network_swarm_public

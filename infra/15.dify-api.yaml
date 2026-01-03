@@ -1,0 +1,214 @@
+version: '3.7'
+
+services:
+  # Define o Serviço de API do Dify
+  dify_api:
+    # Define a imagem do Dify
+    # https://hub.docker.com/r/langgenius/dify-api
+    image: langgenius/dify-api:1.11.1
+    # Define o Hostname
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    # Define as redes do docker
+    networks:
+      - network_swarm_public
+    # Configurações das Variáveis do Ambiente
+    environment:
+      ################################################################
+      ################################################################
+      # Configurações Gerais do Dify #################################
+      ################################################################
+      ################################################################
+      ################################################################
+      # Startup mode, 'api' starts the API server.
+      MODE: api
+      # Define o Log Level da Aplicação
+      LOG_LEVEL: WARNING
+      # Define a Secret Key (Nao deve ser modificada posteriormente)
+      SECRET_KEY: CHAVE_SECRETA_GERADA_AUTOMATICAMENTE
+      # Define a senha inicial do Admin
+      INIT_PASSWORD: ''
+      # Define se as migrations devem ser executadas automaticamente
+      MIGRATION_ENABLED: 'true'
+      # Modo de Deploy
+      DEPLOY_ENV: PRODUCTION
+      ################################################################
+      ################################################################
+      # Configuração de Modo de ETL ##################################
+      ################################################################
+      ################################################################
+      ETL_TYPE: dify
+      ################################################################
+      ################################################################
+      # Configuração de Endereço do Dify #############################
+      ################################################################
+      ################################################################
+      # Define o endereço público da aplicação
+      APP_WEB_URL: 'https://dify.meu-dominio.com.br'
+      # Define o endereço do console do Dify
+      CONSOLE_WEB_URL: 'https://dify.meu-dominio.com.br'
+      # Define o endereço da API
+      CONSOLE_API_URL: 'https://api.meu-dominio.com.br'
+      # Define o endereço da API de Serviços (deixar em branco)
+      SERVICE_API_URL: 'https://api.meu-dominio.com.br'
+      # Define o endereço do backend da API
+      APP_API_URL: 'https://api.meu-dominio.com.br'
+      # Define o endereço das URL para Mídia (deixar em branco)
+      FILES_URL: 'https://api.meu-dominio.com.br/files'
+      PLUGIN_DAEMON_URL: 'http://dify_plugin_daemon_dify_plugin_daemon:5002'
+      PLUGIN_DAEMON_KEY: 'CHAVE_DAEMON_INTERNA'
+      ################################################################
+      ################################################################
+      # Configurações do Banco de Dados ##############################
+      ################################################################
+      ################################################################
+      # Nome de Usuário do Postgres
+      DB_USERNAME: postgres
+      # Senha do Postgres
+      DB_PASSWORD: SENHA
+      # Hostname do Postgres
+      DB_HOST: postgres
+      # Porta do Postgres
+      DB_PORT: 5432
+      # Nome do Banco de Dados no Postgres
+      DB_DATABASE: dify
+      ################################################################
+      ################################################################
+      # Configurações do Redis Cache #################################
+      ################################################################
+      ################################################################
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_USERNAME: ''
+      REDIS_PASSWORD: ''
+      REDIS_USE_SSL: 'false'
+      REDIS_DB: 0
+      ################################################################
+      ################################################################
+      # Configurações do Minio / S3 Storage ##########################
+      ################################################################
+      ################################################################
+      # Define as configurações do Celery Broker
+      # Usar o mesmo redis, porém com um banco diferente
+      CELERY_BROKER_URL: redis://redis:6379/3
+      ################################################################
+      ################################################################
+      # Configurações do Minio / S3 Storage ##########################
+      ################################################################
+      ################################################################
+      STORAGE_TYPE: s3
+      STORAGE_LOCAL_PATH: storage
+      S3_ENDPOINT: 'https://s3.meu-dominio.com.br'
+      S3_BUCKET_NAME: 'dify'
+      S3_ACCESS_KEY: ''
+      S3_SECRET_KEY: ''
+      S3_REGION: 'us-east-1'
+      ################################################################
+      ################################################################
+      # Definição do Vector Store do Dify ############################
+      ################################################################
+      ################################################################
+      # Define o Vector Store do Dify
+      # Aceita os valores: weaviate, qdrant ou pgvector
+      VECTOR_STORE: pgvector
+      ################################################################
+      ################################################################
+      # Configurações do Weaviate Vestor Store #######################
+      ################################################################
+      ################################################################
+      # The Weaviate endpoint URL.
+      WEAVIATE_ENDPOINT: http://weaviate:8080
+      # The Weaviate API key.
+      WEAVIATE_API_KEY: 
+      ################################################################
+      ################################################################
+      # Configurações do Qdrant Vector Store #########################
+      ################################################################
+      ################################################################
+      # The Qdrant endpoint URL.
+      QDRANT_URL: http://qdrant:6333
+      # The Qdrant API key.
+      QDRANT_API_KEY: sua_api_key
+      # The Qdrant clinet timeout setting.
+      QDRANT_CLIENT_TIMEOUT: 20
+      ################################################################
+      ################################################################
+      # Configurações do PGVector Store ##############################
+      ################################################################
+      ################################################################
+      PGVECTOR_HOST: pgvector
+      PGVECTOR_PORT: 5432
+      PGVECTOR_USER: postgres
+      PGVECTOR_PASSWORD: SENHA
+      PGVECTOR_DATABASE: dify
+      ################################################################
+      ################################################################
+      # Configuração do Banco de Dados ###############################
+      ################################################################
+      ################################################################
+      MAIL_TYPE: 'smtp'
+      # default send from email address, if not specified
+      MAIL_DEFAULT_SEND_FROM: 'Dify <contato@promovaweb.com>'
+      SMTP_SERVER: smtp.sendgrid.net
+      SMTP_PORT: 587
+      SMTP_USERNAME: apikey
+      SMTP_PASSWORD: SENHA
+      SMTP_USE_TLS: 'true'
+      INVITE_EXPIRY_HOURS: 72
+      ################################################################
+      ################################################################
+      # Configurações do Dify SandBox ################################
+      ################################################################
+      ################################################################
+      # Endpoint para a execução de código no sandbox
+      CODE_EXECUTION_ENDPOINT: "http://dify_sandbox:8194"
+      # Chave API para autenticação da execução de código no sandbox
+      CODE_EXECUTION_API_KEY: dify-sandbox
+      # Valor máximo permitido para números
+      CODE_MAX_NUMBER: 9223372036854775807
+      # Valor mínimo permitido para números
+      CODE_MIN_NUMBER: -9223372036854775808
+      # Comprimento máximo permitido para strings
+      CODE_MAX_STRING_LENGTH: 80000
+      # Comprimento máximo permitido para transformação de templates
+      TEMPLATE_TRANSFORM_MAX_LENGTH: 80000
+      # Comprimento máximo permitido para arrays de strings
+      CODE_MAX_STRING_ARRAY_LENGTH: 30
+      # Comprimento máximo permitido para arrays de objetos
+      CODE_MAX_OBJECT_ARRAY_LENGTH: 30
+      # Comprimento máximo permitido para arrays de números
+      CODE_MAX_NUMBER_ARRAY_LENGTH: 1000
+    deploy:
+      # Modo de Deploy
+      mode: replicated
+      # Número de Réplicas
+      replicas: 1
+      # Define onde o deploy deve ser postado
+      placement:
+        constraints:
+          - node.labels.app == dify
+      # Define os recursos do serviço
+      resources:
+        # Configura os limites de recursos do Serviço
+        limits:
+          # Configura o limite de CPU do Serviço
+          cpus: "${DIFY_API_CPU_LIMIT:-1.0}"
+          # Configura o limite de memória do Serviço
+          memory: ${DIFY_API_MEM_LIMIT:-2048M}
+        reservations:
+          cpus: "${DIFY_API_CPU_RESERVATION:-0.5}"
+          memory: ${DIFY_API_MEM_RESERVATION:-1024M}
+      # Define os Labels do Traefik
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.dify_api.rule=Host(`diapi.meu-dominio.com.br`)
+        - traefik.http.routers.dify_api.entrypoints=websecure
+        - traefik.http.routers.dify_api.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.dify_api.priority=1
+        - traefik.http.routers.dify_api.service=dify_api
+        - traefik.http.services.dify_api.loadbalancer.server.port=5001
+        - traefik.http.services.dify_api.loadbalancer.passHostHeader=true
+
+networks:
+  network_swarm_public:
+    external: true
+    name: network_swarm_public

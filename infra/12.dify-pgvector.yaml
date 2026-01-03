@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  # Define o PGVector
+  pgvector:
+    # imagem do pgvector
+    image: pgvector/pgvector:pg16
+    # Define o hostname do container
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    # configura a rede do serviço
+    networks:
+      - network_swarm_public
+    # Variáveis de Ambiente do pgvector
+    environment:
+      # Define o usuário
+      PGUSER: postgres
+      # Define a Senha
+      POSTGRES_PASSWORD: SENHA
+      # postgres data directory
+      PGDATA: /var/lib/postgresql/data/pgdata
+      # Banco padrao para o dify
+      POSTGRES_DB: dify
+    # Define os volumes do pgvector
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    deploy:
+      # O editor será executado no modo de replicação
+      mode: replicated
+      # Vamos ter apenas uma instância do editor
+      replicas: 1
+      # Configura o local de execução
+      placement:
+        constraints:
+          # Você pode rodar o Editor no Manager mesmo pois usa poucos recursos
+          - node.role == manager
+          # - node.hostname == worker1
+      # Limitação
+      resources:
+        # Definição dos Limites de Recursos deste Serviço
+        limits:
+          # Define a quantidade de CPU para o N8N para evitar travamento do Host
+          cpus: "2"
+          # Define a quantidade de RAM para o N8N para evitar travamento do Host
+          memory: 2048M
+
+volumes:
+  pgvector_data:
+    external: true
+    name: pgvector_data
+
+networks:
+  network_swarm_public:
+    external: true
+    name: network_swarm_public

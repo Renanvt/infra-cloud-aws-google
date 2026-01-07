@@ -69,5 +69,5 @@ Exemplo: Se o nome do negócio for `minha-empresa`, os arquivos estarão em `/op
 O projeto foi otimizado para equilibrar performance e custo. Consulte o `README.md` para detalhes visuais sobre o breakdown de custos mensais e projeções reais.
 
 ---
-**Versão**: 2.0.1
+**Versão**: 2.0.0
 **Data**: 2025-12-31

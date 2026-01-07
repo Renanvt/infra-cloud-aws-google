@@ -48,6 +48,7 @@ setup_auto_backup() {
         (crontab -l 2>/dev/null | grep -v "$BACKUP_SCRIPT_PATH"; echo "$CRON_CMD") | crontab -
         
         print_success "Cron job configurado para rodar diariamente às 03:00am"
+        print_info "Para executar o backup manualmente agora, rode: ${BOLD}bash $BACKUP_SCRIPT_PATH${RESET}"
         log_message "INFO" "Backup local configurado em $B_ROOT_DIR (Retenção: $B_RETENTION dias)"
         save_checkpoint "backup_vm_configured"
 
@@ -125,6 +126,7 @@ setup_auto_backup() {
         (crontab -l 2>/dev/null | grep -v "$BACKUP_SCRIPT_PATH"; echo "$CRON_CMD") | crontab -
         
         print_success "Cron job configurado para rodar diariamente às 03:00am"
+        print_info "Para executar o backup manualmente agora, rode: ${BOLD}bash $BACKUP_SCRIPT_PATH${RESET}"
         log_message "INFO" "Backup automático configurado para bucket $B_BUCKET"
         save_checkpoint "backup_s3_configured"
     fi

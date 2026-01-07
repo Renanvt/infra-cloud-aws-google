@@ -4,7 +4,7 @@ setup_core_vars() {
     print_banner
     print_step "PASSO 2: DEPLOY DOS SERVIÇOS - CONFIGURAÇÃO"
     
-    print_step "CONFIGURAÇÃO PORTAINER E TRAEFIK"
+    print_step "CONFIGURAÇÃO PORTAINER, TRAEFIK E RABBIT"
     confirm_input "${CYAN}📧 E-mail para SSL (Traefik): ${RESET}" "E-mail SSL:" TRAEFIK_EMAIL
 
     # Domínios Core

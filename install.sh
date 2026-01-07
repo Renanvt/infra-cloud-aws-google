@@ -75,6 +75,7 @@ done
 setup_logging
 print_banner
 check_root
+detect_hardware
 
 # 2. Business Configuration
 print_step "CONFIGURAÇÃO DO NEGÓCIO"
@@ -158,4 +159,5 @@ deploy_services
 
 # 11. Final Summary & Backup Setup
 print_summary
+setup_auto_backup
 run_backup_restore_menu

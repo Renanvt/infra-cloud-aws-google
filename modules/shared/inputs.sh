@@ -7,7 +7,7 @@ confirm_input() {
     local input_val=""
     
     while true; do
-        read -p "$(echo -e "$prompt_text ")" input_val < /dev/tty || continue
+        read -p "$(echo -e "$prompt_text")" input_val < /dev/tty || continue
         
         input_val=$(echo "$input_val" | xargs)
         input_val="${input_val//\`/}"

@@ -94,6 +94,26 @@ handle_sigint() {
 }
 
 # ===== FUNÇÕES DE UI =====
+detect_hardware() {
+    # Detecta RAM Total em MB
+    if [ -r /proc/meminfo ]; then
+        TOTAL_RAM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+        TOTAL_RAM_MB=$(echo "$TOTAL_RAM_KB / 1024" | bc)
+    else
+        TOTAL_RAM_MB=$(free -m | grep Mem | awk '{print $2}')
+    fi
+
+    # Detecta vCPUs
+    TOTAL_CPU_CORES=$(nproc)
+
+    # Fallback caso falhe
+    if [ -z "$TOTAL_RAM_MB" ]; then TOTAL_RAM_MB=0; fi
+    if [ -z "$TOTAL_CPU_CORES" ]; then TOTAL_CPU_CORES=1; fi
+
+    export TOTAL_RAM_MB
+    export TOTAL_CPU_CORES
+}
+
 print_banner() {
     clear
     echo -e "${CYAN}  _   _    ___    _   _         ____    ___   _____  __   __ ${RESET}"

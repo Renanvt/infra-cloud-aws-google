@@ -9,7 +9,11 @@ setup_dify_vars() {
     echo -e "   ${DIM}Se sua VM tiver menos recursos, os serviços podem falhar ou travar.${RESET}"
     
     # Check de requisitos
-    if (( $(echo "$TOTAL_RAM_MB < 3800" | bc -l) )); then
+    # Garantir que variáveis tenham valor numérico
+    : "${TOTAL_RAM_MB:=0}"
+    : "${TOTAL_CPU_CORES:=0}"
+
+    if [ "$TOTAL_RAM_MB" -lt 3800 ]; then
         print_warning "Sua VM tem apenas ${TOTAL_RAM_MB}MB RAM. Dify pode ficar instável."
         read -p "Deseja continuar mesmo assim? (s/n): " FORCE_DIFY < /dev/tty || true
         if [[ ! "$FORCE_DIFY" =~ ^(s|S|sim|SIM)$ ]]; then

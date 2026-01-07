@@ -114,7 +114,7 @@ print_summary() {
     # Validação dos Serviços
     print_step "VALIDANDO SERVIÇOS (DOCKER SWARM)"
     echo -e "${CYAN}Verificando status dos serviços...${RESET}"
-    docker service ls --format "table {{.Name}}\t{{.Replicas}}\t{{.Image}}"
+    docker service ls --format "table {{.Name}}\t{{.Replicas}}\t{{.Image}}" || echo -e "${YELLOW}Não foi possível listar os serviços (Docker pode estar ocupado).${RESET}"
     echo ""
 
     # Resumo Final
@@ -156,12 +156,4 @@ print_summary() {
         echo -e "${DIM}Dify não foi instalado.${RESET}"
     fi
     echo ""
-
-    setup_auto_backup
-    
-    if [ "$ENABLE_DIFY" = true ]; then
-        # setup_dify_resource_monitor # Function not found in original script
-        # print_warning "setup_dify_resource_monitor skipped (not found)"
-        :
-    fi
 }

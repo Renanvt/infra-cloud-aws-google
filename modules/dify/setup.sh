@@ -118,6 +118,13 @@ generate_dify_yamls() {
       MIGRATION_ENABLED: 'true'
       DEPLOY_ENV: PRODUCTION
       ETL_TYPE: dify
+      # Segurança
+      HTTP_REQUEST_MAX_CONNECT_TIMEOUT: 300
+      HTTP_REQUEST_MAX_READ_TIMEOUT: 600
+      HTTP_REQUEST_MAX_WRITE_TIMEOUT: 600
+      # Performance
+      INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH: 1000
+      CELERY_WORKER_MAX_TASKS_PER_CHILD: 200
       APP_WEB_URL: 'https://${DIFY_WEB_DOMAIN}'
       CONSOLE_WEB_URL: 'https://${DIFY_WEB_DOMAIN}'
       CONSOLE_API_URL: 'https://${DIFY_API_DOMAIN}'
@@ -275,6 +282,11 @@ services:
     environment:
       MODE: api
 $DIFY_COMMON_ENV
+      # Rate Limiting
+      API_RATE_LIMIT_ENABLED: 'true'      # Ativa limite de requisições
+      API_RATE_LIMIT: 60      # 60 requisições por minuto
+      API_RATE_LIMIT_UI_ENABLED: 'true'      # Ativa limite de requisições na interface 
+      API_RATE_LIMIT_UI: 60         # 60 requisições por minuto na UI
     deploy:
       mode: replicated
       replicas: 1

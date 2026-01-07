@@ -717,4 +717,4 @@ Verifique se o endpoint do S3 está sem `https://`. O Evolution V2 requer apenas
 ---
 <img width=200px height=200px src="img/5.PNG" alt="Bot logo"></a>
 
-**Versão**: 2.0.1 | **Atualizado**: Dezembro 2025
+**Versão**: 2.0.0 | **Atualizado**: Janeiro 2026

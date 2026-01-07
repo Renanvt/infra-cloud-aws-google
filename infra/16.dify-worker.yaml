@@ -152,6 +152,13 @@ services:
       SMTP_PASSWORD: SENHA
       SMTP_USE_TLS: 'true'
       INVITE_EXPIRY_HOURS: 72
+      # Segurança
+      HTTP_REQUEST_MAX_CONNECT_TIMEOUT: 300
+      HTTP_REQUEST_MAX_READ_TIMEOUT: 600
+      HTTP_REQUEST_MAX_WRITE_TIMEOUT: 600
+      # Performance
+      INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH: 1000
+      CELERY_WORKER_MAX_TASKS_PER_CHILD: 200
       ################################################################
       ################################################################
       # Configurações do Dify SandBox ################################

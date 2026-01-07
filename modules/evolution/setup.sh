@@ -58,6 +58,15 @@ services:
       - CONFIG_SESSION_PHONE_VERSION=2.3000.1030831524
       - QRCODE_LIMIT=30
       - LANGUAGE=pt-BR
+      - CORS_ORIGIN=*
+      - CORS_METHODS=POST,GET,PUT,DELETE
+      - CORS_CREDENTIALS=true
+    # - DEL_TEMP_INSTANCES=true                    # Deleta instâncias temporárias
+    # - CLEAN_STORE_CLEANING_INTERVAL=7200         # Limpa a cada 2 horas (7200 segundos)
+    # - CLEAN_STORE_MESSAGES=true                  # Limpa mensagens antigas
+    # - CLEAN_STORE_MESSAGE_UP_TO_DAYS=30          # Mantém só últimos 30 dias
+    # - CLEAN_STORE_CONTACTS=true                  # Limpa contatos inativos
+    # - CLEAN_STORE_CHATS=true                     # Limpa chats antigos
       - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
       - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
       - DATABASE_ENABLED=true

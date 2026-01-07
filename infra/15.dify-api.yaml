@@ -31,6 +31,18 @@ services:
       MIGRATION_ENABLED: 'true'
       # Modo de Deploy
       DEPLOY_ENV: PRODUCTION
+      # Segurança
+      HTTP_REQUEST_MAX_CONNECT_TIMEOUT: 300   # 5 minutos pra conectar
+      HTTP_REQUEST_MAX_READ_TIMEOUT: 600     # 10 minutos pra ler resposta
+      HTTP_REQUEST_MAX_WRITE_TIMEOUT: 600   # 5 minutos pra conectar
+      # Performance
+      INDEXING_MAX_SEGMENTATION_TOKENS_LENGTH: 1000    # Tamanho máximo de texto por chunk
+      CELERY_WORKER_MAX_TASKS_PER_CHILD: 200    # Reinicia worker após 200 tarefas (evita memory leak)
+      # Rate Limiting
+      API_RATE_LIMIT_ENABLED: 'true'      # Ativa limite de requisições
+      API_RATE_LIMIT: 60      # 60 requisições por minuto
+      API_RATE_LIMIT_UI_ENABLED: 'true'      # Ativa limite de requisições na interface 
+      API_RATE_LIMIT_UI: 60         # 60 requisições por minuto na UI
       ################################################################
       ################################################################
       # Configuração de Modo de ETL ##################################
